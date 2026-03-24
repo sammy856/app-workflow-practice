@@ -29,7 +29,7 @@ jobs:
         run: npm run build
 
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.2.2
+        uses: actions/upload-artifact@v4
         with:
           # Artifact name
           name: frontend # optional, default is artifact
