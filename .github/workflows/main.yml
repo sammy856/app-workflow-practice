@@ -27,3 +27,11 @@ jobs:
 
       - name: build application
         run: npm run build
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.2.2
+        with:
+          # Artifact name
+          name: frontend # optional, default is artifact
+          # A file, directory or wildcard pattern that describes what to upload
+          path: build/
