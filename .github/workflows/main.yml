@@ -1,0 +1,29 @@
+name: Application CI
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - develop
+
+jobs:
+  build:
+    name: Build Application
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: install nodejs 16.x
+        run: |
+          curl -s https://deb.nodesource.com/setup_16.x | sudo bash
+          sudo apt install nodejs -y
+          
+      - name: install dependencies
+        run: npm install
+
+      - name: build application
+        run: npm run build
