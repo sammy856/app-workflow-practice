@@ -54,5 +54,18 @@ jobs:
           password: ${{ secrets.AZPASSWORD }}
           port: ${{ secrets.AZPORT }}
           source: ${{ runner.temp }}/*
-          target: /var/www/html
+          target: /tmp/artifacts
           strip_components: 4
+          
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.AZHOST }}
+          port: ${{ secrets.AZPORT }}
+          username: ${{ secrets.AZUSERNAME }}
+          password: ${{ secrets.AZPASSWORD }}
+          script_stop: true
+          script: |
+            sudo cp -r /tmp/artifact/* /var/www/html/
+            sudo systemctl restart nginx
+      
