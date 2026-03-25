@@ -14,7 +14,13 @@ jobs:
         version: [16.x, 20.x, 18.x]
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+        
       - name: Setup Node.js environment
         uses: actions/setup-node@v6.3.0
         with:
           node-version: ${{ matrix.version }}
+      - run: |
+          npm install
+          npm run build
