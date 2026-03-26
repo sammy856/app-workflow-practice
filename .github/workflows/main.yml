@@ -21,7 +21,7 @@ jobs:
         run: docker build -t react-app:${{ github.run_number }} .
 
       - name: Docker Login
-        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login $NEXUS_URL -u ${{ secrets.NEXUS_USER }} --password-stdin
+        run: echo "${{ secrets.NEXUS_PASSWORD }}" | docker login $NEXUS_URL -u ${{ secrets.NEXUS_USERNAME }} --password-stdin
 
       - name: Docker Tag
         run: docker tag react-app:${{ github.run_number }} $NEXUS_URL/react-app:${{ github.run_number }}
