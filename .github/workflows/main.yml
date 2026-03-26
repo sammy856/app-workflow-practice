@@ -1,34 +1,38 @@
-name: Docker CI
+name: Application CI
+
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
-
-env:
-  NEXUS_URL: 20.235.80.53:8082
+      - develop
+  pull_request:
+    branches:
+      - develop
+ 
 
 jobs:
   build:
-    name: Docker Build CI
-    runs-on: self-hosted
+    name: Build Application
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Allow HTTP Registry
+      - name: install nodejs 16.x
         run: |
-          echo '{"insecure-registries": ["20.235.80.53:8082"]}' | sudo tee /etc/docker/daemon.json
-          sudo systemctl restart docker
+          curl -s https://deb.nodesource.com/setup_16.x | sudo bash
+          sudo apt install nodejs -y 
 
-      - name: Docker Build
-        run: sudo docker build -t react-app:${{ github.run_number }} .
+      - name: install dependencies
+        run: npm install
 
-      - name: Docker Login
-        run: echo "${{ secrets.NEXUS_PASSWORD }}" | sudo docker login $NEXUS_URL -u ${{ secrets.NEXUS_USERNAME }} --password-stdin
+      - name: build application
+        run: npm run build
 
-      - name: Docker Tag
-        run: sudo docker tag react-app:${{ github.run_number }} $NEXUS_URL/react-app:${{ github.run_number }}
+        
 
-      - name: Docker Push
-        run: sudo docker push $NEXUS_URL/react-app:${{ github.run_number }}
+
+
+
+          
+      
