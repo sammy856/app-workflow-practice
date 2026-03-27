@@ -18,10 +18,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: install nodejs 16.x
-        run: |
-          curl -s https://deb.nodesource.com/setup_16.x | sudo bash
-          sudo apt install nodejs -y 
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v6.3.0
+        with:
+          # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
+          node-version: 16.x # optional
 
       - name: install dependencies
         run: npm install
