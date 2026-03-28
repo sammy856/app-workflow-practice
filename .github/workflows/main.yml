@@ -9,7 +9,7 @@ on:
   pull_request:
     branches:
       - develop
- 
+  
 
 jobs:
   build:
@@ -41,7 +41,9 @@ jobs:
       
 
       - name: build application
-        run: npm run build
+        run: |
+          set NODE_OPTIONS=--max_old_space_size=4096
+          npm run build
 
       # 🔢 Version generate (unique every build)
       - name: Set version
@@ -49,9 +51,8 @@ jobs:
           echo "VERSION=1.0.${{ github.run_number }}-${{ github.sha }}" >> $GITHUB_ENV
 
       # 📦 Zip build folder (important for upload)
-      - name: Zip build
-        run: |
-          powershell Compress-Archive -Path build\* -DestinationPath build.zip
+      - name: Zip build (faster)
+        run: tar -a -c -f build.zip build
 
       # 📤 Upload to Nexus
       - name: Upload to Nexus
