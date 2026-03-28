@@ -18,15 +18,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v4
         with:
           # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
           node-version: 16.x # optional
-          cache: npm
-          cache-dependency-path: package-lock.json
+
+      - name: Cache node_modules
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
 
       - name: install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'  #agar na mile cache to npm run chala dena else chala skip
         run: npm ci
 
       - name: build application
