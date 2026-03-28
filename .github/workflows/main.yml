@@ -37,8 +37,28 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'  #agar na mile cache to npm run chala dena else chala skip
         run: npm ci
 
+
+      
+
       - name: build application
         run: npm run build
+
+      # 🔢 Version generate (unique every build)
+      - name: Set version
+        run: |
+          echo "VERSION=1.0.${{ github.run_number }}-${{ github.sha }}" >> $GITHUB_ENV
+
+      # 📦 Zip build folder (important for upload)
+      - name: Zip build
+        run: |
+          powershell Compress-Archive -Path build\* -DestinationPath build.zip
+
+      # 📤 Upload to Nexus
+      - name: Upload to Nexus
+        run: |
+          curl -u ${{ secrets.NEXUS_USER }}:${{ secrets.NEXUS_PASS }} `
+          --upload-file build.zip `
+          http://192.168.224.1:8081/repository/my-nexus-repo/frontend-${{ env.VERSION }}.zip
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
