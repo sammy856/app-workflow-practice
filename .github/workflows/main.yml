@@ -56,9 +56,14 @@ jobs:
       # 📤 Upload to Nexus
       - name: Upload to Nexus
         run: |
-          curl -u ${{ secrets.NEXUS_USER }}:${{ secrets.NEXUS_PASS }} `
-          --upload-file build.zip `
-          http://192.168.224.1:8081/repository/my-nexus-repo/frontend-${{ env.VERSION }}.zip
+          $pair = "${{ secrets.NEXUS_USER }}:${{ secrets.NEXUS_PASS }}"
+          $encoded = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes($pair))
+          
+          Invoke-WebRequest `
+            -Uri "http://192.168.224.1:8081/repository/my-nexus-repo/frontend-${{ env.VERSION }}.zip" `
+            -Method Put `
+            -InFile build.zip `
+            -Headers @{ Authorization = "Basic $encoded" }
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
