@@ -2,13 +2,13 @@ name: Application CI
 
 on:
   workflow_dispatch: 
-  push:
-    branches:
-      - main
-      - develop
-  pull_request:
-    branches:
-      - develop
+  # push:
+  #   branches:
+  #     - main
+  #     - develop
+  # pull_request:
+  #   branches:
+  #     - develop
 
 env:
   NEXUS_URL: http://192.168.224.1:8081
