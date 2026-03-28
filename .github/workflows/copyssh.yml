@@ -1,1 +1,72 @@
+name: SSH to VM for copy
 
+# on:
+#   workflow_dispatch: 
+#   push:
+#     branches:
+#       - main
+      
+
+jobs:
+  build:
+    name: Application Build CI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6.0.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6.3.0 
+        with:
+          # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
+          node-version: 16.x # optional
+
+
+      - name: install dependencies 
+        run: npm install
+
+      - name: Build Application
+        run: npm run build
+
+
+      - name: build application
+        run: npm run build
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.2.2
+        with:
+          # Artifact name
+          name: React-App-${{ github.run_id }} 
+          path: build/
+            
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy-Release
+    steps: 
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.1.0
+        with:
+          # Artifact name
+          name: React-App-${{ github.run_id }} 
+          # Destination path
+          path: ${{ runner.tmp }} 
+  
+      - name: Copy files via SSH
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets. USERNAME }}
+          password: ${{ secrets. PASSWORD }}
+          port: ${{ secrets.PORT}}
+          source: "tests/a.txt,tests/b.txt"
+          target: your_server_target_folder_path
+        
+      
+
+    
+
+        
+          
+
+      
