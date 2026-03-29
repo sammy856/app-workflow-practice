@@ -1,83 +1,40 @@
-name: SSH to VM for copy
+name: Docker CI
 
 on:
-  workflow_dispatch: 
+  workflow_dispatch:
   push:
     branches:
       - main
-      
+
+env:
+  NEXUS_URL: 192.168.224.1:8082   # ❌ no http://
 
 jobs:
-  # build:
-  #   name: Application Build CI
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v6.0.2
-
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v6.3.0 
-  #       with:
-  #         # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
-  #         node-version: 16.x # optional
-
-
-  #     - name: install dependencies 
-  #       run: npm install
-
-  #     - name: Build Application
-  #       run: npm run build
-
-  #     - name: Upload a Build Artifact
-  #       uses: actions/upload-artifact@v4
-  #       with:
-  #         # Artifact name
-  #         name: React-App-${{ github.run_id }} 
-  #         path: build/
-            
-
-  deploy:
+  build:
+    name: Docker Build CI
     runs-on: ubuntu-latest
-    # needs: build
-    name: Deploy-Release
-    steps: 
-      - name: Download a Build Artifact
-        uses: actions/download-artifact@v8
-        with:
-          # Artifact name
-          name: React-App-23706417765
-          github-token: ${{ GITHUB.TOKEN }}
-          # Destination path
-          path: ${{ runner.temp }} 
-          run-id: 23706417765
-  
-      - name: Copy files via SSH
-        uses: appleboy/scp-action@v1
-        with:
-          host: ${{ secrets.LINUXHOST }}
-          username: ${{ secrets. LINUXUSERNAME }}
-          password: ${{ secrets. LINUXPASSWORD }}
-          port: ${{ secrets.LINUXPORT }}
-          source: ${{ runner.temp }}/*
-          target: /tmp/artifacts
-          strip_components: 4
-        
-      - name: SSH Remote Commands
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.LINUXHOST }}
-          username: ${{ secrets. LINUXUSERNAME }}
-          password: ${{ secrets. LINUXPASSWORD }}
-          port: ${{ secrets.LINUXPORT }}
-          script_stop: true
-          script: |
-            sudo cp -r /tmp/artifacts/* /var/www/html/
-            sudo systemctl restart nginx 
-            
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build Docker Image
+        run: docker build -t react-app:${{ github.run_number }} .
+
+      - name: Login to Nexus
+        run: |
+          echo "${{ secrets.NEXUS_PASS }}" | docker login ${{ env.NEXUS_URL }} -u "${{ secrets.NEXUS_USER }}" --password-stdin
+
+      - name: Tag Docker Image
+        run: |
+          docker tag react-app:${{ github.run_number }} ${{ env.NEXUS_URL }}/react-app:${{ github.run_number }}
+
+      - name: Push Docker Image
+        run: |
+          docker push ${{ env.NEXUS_URL }}/react-app:${{ github.run_number }}
 
     
-
-        
-          
-
       
+
+          
+        
