@@ -71,7 +71,6 @@ jobs:
           port: ${{ secrets.LINUXPORT }}
           script_stop: true
           script: |
-            sudo mkdir -p /var/www/html
             sudo cp -r /tmp/artifacts/* /var/www/html/
             sudo systemctl restart nginx 
 
