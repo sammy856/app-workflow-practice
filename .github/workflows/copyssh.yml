@@ -61,7 +61,8 @@ jobs:
           password: ${{ secrets. LINUXPASSWORD }}
           port: ${{ secrets.LINUXPORT }}
           source: ${{ runner.temp }}/*
-          target: /tmp
+          target: /tmp  
+          strip_components: 4
         
       
 
