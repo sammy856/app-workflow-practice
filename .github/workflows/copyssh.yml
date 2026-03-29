@@ -28,10 +28,6 @@ jobs:
       - name: Build Application
         run: npm run build
 
-
-      - name: build application
-        run: npm run build
-
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -51,7 +47,7 @@ jobs:
           # Artifact name
           name: React-App-${{ github.run_id }} 
           # Destination path
-          path: ${{ runner.tmp }} 
+          path: ${{ runner.temp }} 
   
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
