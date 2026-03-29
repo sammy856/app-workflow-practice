@@ -73,6 +73,7 @@ jobs:
           script: |
             sudo cp -r /tmp/artifacts/* /var/www/html/
             sudo systemctl restart nginx 
+            
 
     
 
