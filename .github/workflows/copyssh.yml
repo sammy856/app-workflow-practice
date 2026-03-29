@@ -62,7 +62,17 @@ jobs:
           target: /tmp/artifacts
           strip_components: 4
         
-      
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.LINUXHOST }}
+          username: ${{ secrets. LINUXUSERNAME }}
+          password: ${{ secrets. LINUXPASSWORD }}
+          port: ${{ secrets.LINUXPORT }}
+          script_stop: true
+          script: |
+            sudo cp -r /tmp/artifacts/* /var/www/html/
+            sudo systemctl restart nginx 
 
     
 
