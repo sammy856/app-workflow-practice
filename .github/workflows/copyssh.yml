@@ -46,6 +46,7 @@ jobs:
         with:
           # Artifact name
           name: React-App-23706417765
+          github-token: ${{ GITHUB.TOKEN }}
           # Destination path
           path: ${{ runner.temp }} 
           run-id: 23706417765
