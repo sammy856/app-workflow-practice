@@ -8,46 +8,47 @@ on:
       
 
 jobs:
-  build:
-    name: Application Build CI
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6.0.2
+  # build:
+  #   name: Application Build CI
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v6.0.2
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6.3.0 
-        with:
-          # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
-          node-version: 16.x # optional
+  #     - name: Setup Node.js
+  #       uses: actions/setup-node@v6.3.0 
+  #       with:
+  #         # Version Spec of the version to use. Examples: 12.x, 10.15.1, >=10.15.0.
+  #         node-version: 16.x # optional
 
 
-      - name: install dependencies 
-        run: npm install
+  #     - name: install dependencies 
+  #       run: npm install
 
-      - name: Build Application
-        run: npm run build
+  #     - name: Build Application
+  #       run: npm run build
 
-      - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          # Artifact name
-          name: React-App-${{ github.run_id }} 
-          path: build/
+  #     - name: Upload a Build Artifact
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         # Artifact name
+  #         name: React-App-${{ github.run_id }} 
+  #         path: build/
             
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    # needs: build
     name: Deploy-Release
     steps: 
       - name: Download a Build Artifact
         uses: actions/download-artifact@v8
         with:
           # Artifact name
-          name: React-App-${{ github.run_id }} 
+          name: React-App-23706417765
           # Destination path
           path: ${{ runner.temp }} 
+          run-id: 23706417765
   
       - name: Copy files via SSH
         uses: appleboy/scp-action@v1
@@ -57,7 +58,7 @@ jobs:
           password: ${{ secrets. LINUXPASSWORD }}
           port: ${{ secrets.LINUXPORT }}
           source: ${{ runner.temp }}/*
-          target: /tmp  
+          target: /tmp/artifacts
           strip_components: 4
         
       
