@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  NEXUS_URL: 192.168.224.1:8081   # ❌ no http://
+  NEXUS_URL: http://192.168.224.1:8081   # ❌ no http://
 
 jobs:
   build:
