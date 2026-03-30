@@ -7,7 +7,8 @@ on:
       - main
 
 env:
-  NEXUS_URL: 20.197.46.174:8082   # ❌ no http://
+  NEXUS_URL: https://20.197.46.174:8082
+   
 
 jobs:
   build:
