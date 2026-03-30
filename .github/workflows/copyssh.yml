@@ -7,7 +7,7 @@ on:
       - main
 
 env:
-  NEXUS_URL: 192.168.224.1:8082   # ❌ no http://
+  NEXUS_URL: 192.168.224.1:8081   # ❌ no http://
 
 jobs:
   build:
@@ -15,11 +15,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      # - name: Checkout
+      #   uses: actions/checkout@v4
 
-      - name: Build Docker Image
-        run: docker build -t react-app:${{ github.run_number }} .
+      # - name: Build Docker Image
+      #   run: docker build -t react-app:${{ github.run_number }} .
 
       - name: Login to Nexus
         run: |
