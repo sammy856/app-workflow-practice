@@ -7,12 +7,12 @@ on:
       - main
 
 env:
-  NEXUS_URL: http://192.168.224.1:8082   # ❌ no http://
+  NEXUS_URL: http://20.197.46.174:8082   # ❌ no http://
 
 jobs:
   build:
     name: Docker Build CI
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       # - name: Checkout
