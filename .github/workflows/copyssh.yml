@@ -7,7 +7,8 @@ on:
       - main
 
 env:
-  NEXUS_URL: http://4.186.30.35:8082
+  NEXUS_URL: 4.186.30.35:8082
+  REPO_NAME: docker-hosted-repo
   
     
 
@@ -26,7 +27,7 @@ jobs:
 
       - name: Login to Nexus
         run: |
-          docker login http://4.186.30.35:8082 -u "${{ secrets.NEXUS_USER }}" -p "${{ secrets.NEXUS_PASS }}"
+          run: docker login ${{ env.NEXUS_URL }} -u "${{ secrets.NEXUS_USER }}" -p "${{ secrets.NEXUS_PASS }}"
 
       - name: Tag Docker Image
         run: |
