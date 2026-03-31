@@ -7,7 +7,8 @@ on:
       - main
 
 env:
-  NEXUS_URL: https://20.197.46.174:8082
+  NEXUS_URL: 4.186.30.35/:8082
+  REPO_NAME: docker-hosted-repo
    
 
 jobs:
@@ -21,12 +22,6 @@ jobs:
 
       # - name: Build Docker Image
       #   run: docker build -t react-app:${{ github.run_number }} .
-
-      - name: Trust Nexus SSL Certificate
-        run: |
-          echo "${{ secrets.NEXUS_CERT }}" > nexus.crt
-          sudo cp nexus.crt /usr/local/share/ca-certificates/nexus.crt
-          sudo update-ca-certificates
 
 
       - name: Login to Nexus
