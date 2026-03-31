@@ -27,7 +27,7 @@ jobs:
 
       - name: Login to Nexus
         run: |
-          run: docker login ${{ env.NEXUS_URL }} -u "${{ secrets.NEXUS_USER }}" -p "${{ secrets.NEXUS_PASS }}"
+          docker login ${{ env.NEXUS_URL }} -u "${{ secrets.NEXUS_USER }}" -p "${{ secrets.NEXUS_PASS }}"
 
       - name: Tag Docker Image
         run: |
