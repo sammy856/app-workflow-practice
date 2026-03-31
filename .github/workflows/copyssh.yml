@@ -1,10 +1,10 @@
 name: Docker CI
 
-# on:
-#   workflow_dispatch:
-#   push:
-#     branches:
-#       - main
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
  
 env:
   NEXUS_URL: 4.186.30.35:8082
@@ -18,11 +18,11 @@ jobs:
     runs-on: self-hosted
 
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      # - name: Build Docker Image
-      #   run: sudo docker build -t react-app:${{ github.run_number }} .
+      - name: Build Docker Image
+        run: sudo docker build -t react-app:${{ github.run_number }} .
 
 
       - name: Login to Nexus
