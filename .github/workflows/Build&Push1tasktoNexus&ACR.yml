@@ -13,11 +13,11 @@
 
 name: Docker CI
 
-on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+# on:
+#   workflow_dispatch:
+#   push:
+#     branches:
+#       - main
  
 env:
   # NEXUS_URL: 4.186.30.35:8082   for nexus push 
@@ -29,55 +29,27 @@ env:
       
 
 jobs:
-  scan:
-    runs-on: ubuntu-latest
-
-    permissions:
-      # contents permission to clone the repository
-      contents: read
-      packages: read
-      # issues and pull-requests permissions to write results as pull
-      # request comments. Omit them if you don't need summary comments
-      issues: write
-      pull-requests: write
-      # To report GitHub Actions status checks. Omit if you don't need
-      # to update commit status
-      statuses: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Super-linter
-        uses: super-linter/super-linter@v8.6.0 # x-release-please-version
-        env:
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_DOCKERFILE_HADOLINT: true
+  
           
         
-  # build:
-  #   name: Docker Build CI
-  #   runs-on: self-hosted
+  build:
+    name: Docker Build CI
+    runs-on: self-hosted
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v4
-
-
-         # build x dikkat kar raha tha to hataaana pada
-      # - name: Set up Docker Buildx
-      #   uses: docker/setup-buildx-action@v3
-      #   with:
-      #     buildkitd-flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host  
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
 
+         build x dikkat kar raha tha to hataaana pada
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          buildkitd-flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host  
 
-         # Neeche kisi bhi 1 se ham nexus login kar sakte hai
+
+
+      #    Neeche kisi bhi 1 se ham nexus login kar sakte hai
       # - name: Nexus Login
       #   run: |
       #     docker login ${{ env.NEXUS_URL }} \

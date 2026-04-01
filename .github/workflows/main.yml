@@ -1,0 +1,149 @@
+# Isme hum build or push 1 hi task me chala rahe hai
+# Nexus push 
+# ACR PUSH
+# Insecure registries add honi chaliye- 4.186.30.35:8082
+# user ko sudo user banao ya rights do
+# docker login nexus url bina sudo ke chalna chahiye
+# Nexus me http 8081 select 
+# VM me nginx install
+# runner will be vm 
+# secrets me ACR ke ya NEXUS ke login pass add hone chahiye
+
+
+
+name: Docker CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+ 
+env:
+  # NEXUS_URL: 4.186.30.35:8082   for nexus push 
+  ACR_URL: sammyacr.azurecr.io
+  # REPO_NAME: docker-hosted-repo    fro nexus
+
+
+        
+
+jobs:
+  scan-super-linter:
+    runs-on: ubuntu-latest
+
+    permissions:
+      # contents permission to clone the repository
+      contents: read
+      packages: read
+      # issues and pull-requests permissions to write results as pull
+      # request comments. Omit them if you don't need summary comments
+      issues: write
+      pull-requests: write
+      # To report GitHub Actions status checks. Omit if you don't need
+      # to update commit status
+      statuses: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Super-linter
+        uses: super-linter/super-linter@v8.6.0 # x-release-please-version
+        env:
+          # To report GitHub Actions status checks
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VALIDATE_ALL_CODEBASE: false
+          VALIDATE_DOCKERFILE_HADOLINT: true
+
+  scan-trivy:
+    name: Trivy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build an image from Dockerfile
+        run: docker build -t /${{ env.ACR_URL }}/my-app:${{ github.run_number }} .
+        
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.35.0
+        with:
+          image-ref: '${{ env.ACR_URL }}/my-app:${{ github.run_number }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'          
+
+    
+          
+        
+  # build:
+  #   name: Docker Build CI
+  #   runs-on: self-hosted
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+
+
+         # build x dikkat kar raha tha to hataaana pada
+      # - name: Set up Docker Buildx
+      #   uses: docker/setup-buildx-action@v3
+      #   with:
+      #     buildkitd-flags: --allow-insecure-entitlement security.insecure --allow-insecure-entitlement network.host  
+
+
+
+         # Neeche kisi bhi 1 se ham nexus login kar sakte hai
+      # - name: Nexus Login
+      #   run: |
+      #     docker login ${{ env.NEXUS_URL }} \
+      #     -u "${{ secrets.NEXUS_USER }}" \
+      #     -p "${{ secrets.NEXUS_PASS }}"
+
+
+      
+            
+      # - name: Nexus Login
+      #   uses: docker/login-action@v4.0.0
+      #   with:
+      #     registry: ${{ env.NEXUS_URL }}
+      #     username: ${{ secrets.NEXUS_USER }}
+      #     password: ${{ secrets.NEXUS_PASS }}
+      
+    #   - name: ACR Login
+    #     uses: docker/login-action@v4.0.0
+    #     with:
+    #       registry: ${{ env.ACR_URL }}
+    #       username: ${{ secrets.ACR_USER }}
+    #       password: ${{ secrets.ACR_PASS }}     
+          
+
+    #   - name: Build and push Docker images
+    #     uses: docker/build-push-action@v7
+    #     with:
+    #       context: .
+    #       # Path to the Dockerfile
+    #       file: ./Dockerfile 
+    #       push: true
+    #       # tags: ${{ env.NEXUS_URL }}/${{ env.REPO_NAME }}/react-app:${{ github.run_number }} 
+    #       tags: ${{ env.ACR_URL }}/react-app:${{ github.run_number }} 
+
+          
+         
+         
+
+          
+          
+          
+          
+
+    
+      
+
+          
+        
