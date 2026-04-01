@@ -49,6 +49,8 @@ jobs:
           file: ./Dockerfile 
           push: true
           tags: ${{ env.NEXUS_URL }}/${{ env.REPO_NAME }}/react-app:${{ github.run_number }} 
+
+          
          
          
 
