@@ -37,7 +37,7 @@ jobs:
           # Path to the Dockerfile
           file: ./Dockerfile 
           push: true
-          tags: ${{ env.NEXUS_URL }}/react-app:${{ github.run_number }} 
+          tags: 4.186.30.35:8082/react-app:${{ github.run_number }} 
          
          
 
