@@ -7,7 +7,7 @@ on:
       - main
  
 env:
-  NEXUS_URL: 4.186.30.35:8082
+  NEXUS_URL: http://4.186.30.35:8082
   REPO_NAME: docker-hosted-repo
   
     
@@ -24,15 +24,13 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         
-      - name: Docker Login
+      - name: Nexus Login
         run: |
           docker login ${{ env.NEXUS_URL }} \
           -u "${{ secrets.NEXUS_USER }}" \
           -p "${{ secrets.NEXUS_PASS }}"
 
       - name: Build and push Docker images
-        # You may pin to the exact commit or the version.
-        # uses: docker/build-push-action@d08e5c354a6adb9ed34480a06d141179aa583294
         uses: docker/build-push-action@v7
         with:
           context: .
