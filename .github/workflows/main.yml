@@ -73,10 +73,19 @@ jobs:
         with:
           image-ref: '${{ env.ACR_URL }}/my-app:${{ github.run_number }}'
           format: 'table'
+          output: 'trivy-report.txt'
           exit-code: '1'
           ignore-unfixed: true
           vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'          
+          severity: 'CRITICAL,HIGH'   
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.2.2
+        with:
+          # Artifact name
+          name: result-artifact
+          # A file, directory or wildcard pattern that describes what to upload
+          path: trivy-report.txt
 
     
           
