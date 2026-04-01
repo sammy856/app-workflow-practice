@@ -10,7 +10,7 @@ env:
   NEXUS_URL: 4.186.30.35:8082
   REPO_NAME: docker-hosted-repo
   
-    
+     
 
 jobs:
   build:
