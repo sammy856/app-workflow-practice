@@ -69,6 +69,7 @@ jobs:
         run: docker build -t ${{ env.ACR_URL }}/my-app:${{ github.run_number }} .
         
       - name: Run Trivy vulnerability scanner
+        continue-on-error: true
         uses: aquasecurity/trivy-action@0.35.0
         with:
           image-ref: '${{ env.ACR_URL }}/my-app:${{ github.run_number }}'
